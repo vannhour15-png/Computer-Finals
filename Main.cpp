@@ -142,3 +142,96 @@ int main(){
     car1.displayInfo();
     return 0;
 }
+
+class Booking {
+    private:
+        int BookingId;
+        string rentalDate;
+        string returnDate;
+        int numDays;
+        bool bookingStatus;
+
+    public:
+        Booking(int BookingId, string rentalDate, string returnDate, int numDays, bool bookingStatus) {
+            this->BookingId = BookingId;
+            this->rentalDate = rentalDate;
+            this->returnDate = returnDate;
+            this->numDays = numDays;
+            this->bookingStatus = true;
+        }
+        void CreateBooking(){
+            cout << "Enter booking Id:";
+            cin >> BookingId;
+
+            cout << "Enter rental date:";
+            cin >> rentalDate;
+
+            cout << "Enter return date:";
+            cin >> returnDate;
+
+            cout << "Enter number of days:";
+            cin >> numDays;
+
+            bookingStatus = true;
+
+            cout << "Booking created" << endl;
+        }
+        void CancelBooking(){
+            bookingStatus = false;
+            cout << "Booking cancelled" << endl;
+        }
+        void EditBooking(){
+            cout << "Enter new rent date: ";
+            cin >> rentalDate;
+
+            cout << "Enter new return date: ";
+            cin >> returnDate;
+
+            cout << "Enter new number of days: ";
+            cin >> numDays;
+
+            cout << "Booking updated" << endl;
+        }
+        void DisplayBooking(){
+            cout << "\n--- Booking info ---" << endl;
+            cout << "Booking Id: " << BookingId << endl;
+            cout << "Rental date: " << rentalDate << endl;
+            cout << "Return date: " << returnDate << endl;
+            cout << "Number of days: " << numDays << endl;
+            if (bookingStatus)
+                cout << "Booking status: Active" << endl;
+            else
+                cout << "Booking status: Cancelled" << endl;
+        }
+
+    int getBookingId() {
+        return BookingId;
+    }
+    void setBookingId(int BookingId) {
+        this->BookingId = BookingId;
+    }
+    string getRentalDate() {
+        return rentalDate;
+    }
+    void setRentalDate(string rentalDate) {
+        this->rentalDate = rentalDate;
+    }
+    string getReturnDate() {
+        return returnDate;
+    }
+    void setReturnDate(string returnDate) {
+        this->returnDate = returnDate;
+    }
+    int getNumDays() {
+        return numDays;
+    }
+    void setNumDays(int numDays) {
+        this->numDays = numDays;
+    }
+    bool getBookingStatus() {
+        return bookingStatus;
+    }
+    void setBookingStatus(bool bookingStatus) {
+        this->bookingStatus = bookingStatus;
+    }
+};
