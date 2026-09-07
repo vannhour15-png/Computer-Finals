@@ -235,3 +235,27 @@ class Booking {
         this->bookingStatus = bookingStatus;
     }
 };
+
+int main() {
+    Car car1("Toyota", "Black", 101, 2022, 50.00, true, true, "Sedan", 4);
+    cout << "--- Car Info ---" << endl;
+    car1.displayInfo();
+
+    Booking booking1(1, "05/09/2026", "10/09/2026", 5, true);
+    booking1.DisplayBooking();
+
+    cout << "\nCreating a new booking: " << endl;
+    booking1.CreateBooking();
+    booking1.DisplayBooking();
+
+    cout << "\nEdit booking: " << endl;
+    booking1.EditBooking();
+    booking1.DisplayBooking();
+
+    cout << "\nCancelling booking: " << endl;
+    booking1.CancelBooking();
+    booking1.DisplayBooking();
+
+    return 0;
+
+}
