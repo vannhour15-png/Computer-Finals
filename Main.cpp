@@ -8,18 +8,16 @@ private:
     int year;
     double rentalPrice;
     bool AvailStatus;
-    bool automatic;
 
 public:
 
-    Vehicle(string Model, string Color, string vehicleId, int year, double rentalPrice, bool AvailStatus, bool automatic) {
+    Vehicle(string Model, string Color, string vehicleId, int year, double rentalPrice, bool AvailStatus) {
         this->Model = Model;
         this->Color = Color;
         this->vehicleId = vehicleId;
         this->year = year;
         this->rentalPrice = rentalPrice;
         this->AvailStatus = AvailStatus;
-        this->automatic = automatic;
     }
 
     string getModel() {
@@ -70,14 +68,6 @@ public:
         this->AvailStatus = AvailStatus;
     }
 
-    bool getAutomatic() {
-        return automatic;
-    }
-
-    void setAutomatic(bool automatic) {
-        this->automatic = automatic;
-    }
-
     virtual void displayInfo() {
         cout << "Vehicle ID: " << vehicleId << endl;
         cout << "Model: " << Model << endl;
@@ -89,13 +79,7 @@ public:
             cout << "Available: Yes" << endl;
         else
             cout << "Available: No" << endl;
-
-        if (automatic)
-            cout << "Automatic: Yes" << endl;
-        else
-            cout << "Automatic: No" << endl;
     }
-
     static void SearchByType(Vehicle* list[], int count, string typeName) {
         cout << "\n--- All " << typeName << " ---" << endl;
 
@@ -120,8 +104,8 @@ public:
     static Vehicle* carList[5];
     static int carCount;
 
-    Car(string Model, string Color, string vehicleId, int year, double rentalPrice, bool AvailStatus, bool automatic, string bodyType, int passengerCapacity)
-        : Vehicle(Model, Color, vehicleId, year, rentalPrice, AvailStatus, automatic) {
+    Car(string Model, string Color, string vehicleId, int year, double rentalPrice, bool AvailStatus, string bodyType, int passengerCapacity)
+        : Vehicle(Model, Color, vehicleId, year, rentalPrice, AvailStatus) {
 
         this->bodyType = bodyType;
         this->passengerCapacity = passengerCapacity;
@@ -166,8 +150,8 @@ public:
     static Vehicle* motoList[5];
     static int motoCount;
 
-    Motorcycle(string Model, string Color, string vehicleId, int year, double rentalPrice, bool AvailStatus, bool automatic, string bikeType, int engineCC)
-        : Vehicle(Model, Color, vehicleId, year, rentalPrice, AvailStatus, automatic) {
+    Motorcycle(string Model, string Color, string vehicleId, int year, double rentalPrice, bool AvailStatus, string bikeType, int engineCC)
+        : Vehicle(Model, Color, vehicleId, year, rentalPrice, AvailStatus) {
 
         this->bikeType = bikeType;
         this->engineCC = engineCC;
@@ -438,13 +422,14 @@ Vehicle* Motorcycle::motoList[5];
 int Motorcycle::motoCount = 0;
 
 int main() {
+    int choice;
     
-    Car c1("Toyota", "Black", "C001", 2022, 50.00, true, true, "Sedan", 4);
-    Car c2("Honda", "White", "C002", 2021, 45.00, true, true, "SUV", 5);
-    Car c3("Mazda", "Red", "C003", 2023, 55.00, false, true, "Coupe", 2);
+    Car c1("Toyota", "Black", "C001", 2022, 50.00, true, "Sedan");
+    Car c2("Honda", "White", "C002", 2021, 45.00, true, "SUV");
+    Car c3("Mazda", "Red", "C003", 2023, 55.00, false, "Coupe");
     
-    Motorcycle m1("Yamaha", "Black", "M001", 2022, 25.00, true, false, "Sport", 600);
-    Motorcycle m2("Honda", "Red", "M002", 2021, 20.00, true, false, "Cruiser", 400);
+    Motorcycle m1("Yamaha", "Black", "M001", 2022, 25.00, true, "Sport", 600);
+    Motorcycle m2("Honda", "Red", "M002", 2021, 20.00, true, "Cruiser", 400);
     
     Car::addCar(&c1);
     Car::addCar(&c2);
@@ -456,11 +441,25 @@ int main() {
     cout << "Welcome to VVIP Rentals" << endl;
     cout << "We have State of the art, Car and Motorcycle Rentals available to book In Phnom Penh" << endl;
 
-    Car::SearchByType(Car::carList, Car::carCount, "Cars");
-    Motorcycle::SearchByType(Motorcycle::motoList, Motorcycle::motoCount, "Motorcycles");
+    do {
+    cout << "Please select from the options below: "; cin >> choice;
+        switch (choice){
+            case 1:
+                Car::SearchByType(Car::carList, Car::carCount, "Cars");
+                break;
+            case 2:
+                Motorcycle::SearchByType(Motorcycle::motoList, Motorcycle::motoCount, "Motorcycles");
+                break;
+            case 3:
 
-    Booking booking1(1, "05/09/2026", "10/09/2026", 5, true);
-    booking1.DisplayBooking();
+            case 4:
+                cout << "Exiting Program..";
+                break;
+        }
+} while (choice != 4);
+
+    ///Booking booking1(1, "05/09/2026", "10/09/2026", 5, true);
+    ///booking1.DisplayBooking();
 
     return 0;
 }
