@@ -1,3 +1,4 @@
+
 #include <iostream>
 using namespace std;
 
@@ -80,6 +81,7 @@ public:
         else
             cout << "Available: No" << endl;
     }
+
     static void SearchByType(Vehicle* list[], int count, string typeName) {
         cout << "\n--- All " << typeName << " ---" << endl;
 
@@ -95,16 +97,21 @@ public:
     }
 };
 
+
 class Car : public Vehicle {
+
 private:
     string bodyType;
     int passengerCapacity;
 
 public:
+
     static Vehicle* carList[5];
     static int carCount;
 
-    Car(string Model, string Color, string vehicleId, int year, double rentalPrice, bool AvailStatus, string bodyType, int passengerCapacity)
+    Car(string Model, string Color, string vehicleId, int year,
+        double rentalPrice, bool AvailStatus, string bodyType,
+        int passengerCapacity)
         : Vehicle(Model, Color, vehicleId, year, rentalPrice, AvailStatus) {
 
         this->bodyType = bodyType;
@@ -141,16 +148,21 @@ public:
     }
 };
 
+
 class Motorcycle : public Vehicle {
+
 private:
     string bikeType;
     int engineCC;
 
 public:
+
     static Vehicle* motoList[5];
     static int motoCount;
 
-    Motorcycle(string Model, string Color, string vehicleId, int year, double rentalPrice, bool AvailStatus, string bikeType, int engineCC)
+    Motorcycle(string Model, string Color, string vehicleId, int year,
+               double rentalPrice, bool AvailStatus, string bikeType,
+               int engineCC)
         : Vehicle(Model, Color, vehicleId, year, rentalPrice, AvailStatus) {
 
         this->bikeType = bikeType;
@@ -188,62 +200,239 @@ public:
 };
 
 
-class Rental {
-    private:
-    double totalPrice;
-    double securityDeposit;
-    string paymentStatus;
-    
-    public:
-    Rental(double totalPrice, double securityDeposit, string paymentStatus) {
-        this->totalPrice = totalPrice;
-        this->securityDeposit = securityDeposit;
-        this->paymentStatus = paymentStatus;
+class Booking {
+
+private:
+    int BookingId;
+    string rentalDate;
+    string returnDate;
+    int numDays;
+    bool bookingStatus;
+
+public:
+
+    Booking(int BookingId, string rentalDate, string returnDate,
+            int numDays, bool bookingStatus) {
+
+        this->BookingId = BookingId;
+        this->rentalDate = rentalDate;
+        this->returnDate = returnDate;
+        this->numDays = numDays;
+        this->bookingStatus = bookingStatus;
     }
-    
-    double gettotalprice() {
-        return totalPrice;
+
+    void CreateBooking() {
+
+        cout << "Enter booking Id: ";
+        cin >> BookingId;
+
+        cout << "Enter rental date: ";
+        cin >> rentalDate;
+
+        cout << "Enter return date: ";
+        cin >> returnDate;
+
+        cout << "Enter number of days: ";
+        cin >> numDays;
+
+        bookingStatus = true;
+
+        cout << "Booking created" << endl;
     }
-    
-    void settotalprice(double totalPrice) {
-        this->totalPrice = totalPrice;
+
+    void CancelBooking() {
+        bookingStatus = false;
+        cout << "Booking cancelled" << endl;
     }
-    
-    double getsecuritydeposit() {
-        return securityDeposit;
+
+    void EditBooking() {
+
+        cout << "Enter new rent date: ";
+        cin >> rentalDate;
+
+        cout << "Enter new return date: ";
+        cin >> returnDate;
+
+        cout << "Enter new number of days: ";
+        cin >> numDays;
+
+        cout << "Booking updated" << endl;
     }
-    
-    void setsecurityDeposit(double securityDeposit) {
-        this->securityDeposit = securityDeposit;
+
+    void DisplayBooking() {
+
+        cout << "\n--- Booking info ---" << endl;
+        cout << "Booking Id: " << BookingId << endl;
+        cout << "Rental date: " << rentalDate << endl;
+        cout << "Return date: " << returnDate << endl;
+        cout << "Number of days: " << numDays << endl;
+
+        if (bookingStatus)
+            cout << "Booking status: Active" << endl;
+        else
+            cout << "Booking status: Cancelled" << endl;
     }
-    
-    string getpaymentstatus() {
-        return paymentStatus;
+
+    int getBookingId() {
+        return BookingId;
     }
-    
-    void setpaymentstatus(string paymentStatus) {
-        this->paymentStatus = paymentStatus;
+
+    void setBookingId(int BookingId) {
+        this->BookingId = BookingId;
     }
-    
-    void displayInfo() {
-        cout << "Total Price: $" << totalPrice << endl;
-        cout << "Security Deposit: $" << securityDeposit << endl;
-        cout << "Payment Status: " << paymentStatus << endl;
+
+    string getRentalDate() {
+        return rentalDate;
+    }
+
+    void setRentalDate(string rentalDate) {
+        this->rentalDate = rentalDate;
+    }
+
+    string getReturnDate() {
+        return returnDate;
+    }
+
+    void setReturnDate(string returnDate) {
+        this->returnDate = returnDate;
+    }
+
+    int getNumDays() {
+        return numDays;
+    }
+
+    void setNumDays(int numDays) {
+        this->numDays = numDays;
+    }
+
+    bool getBookingStatus() {
+        return bookingStatus;
+    }
+
+    void setBookingStatus(bool bookingStatus) {
+        this->bookingStatus = bookingStatus;
     }
 };
 
+
+class Rental : public Booking {
+
+private:
+    double rentalPrice;
+    double securityDeposit;
+    double totalPrice;
+    string paymentStatus;
+    string paymentMethod;
+
+public:
+
+    Rental(int bookingId, string rentalDate, string returnDate,
+           int numDays, bool bookingStatus, double rentalPrice,
+           double securityDeposit, string paymentStatus,
+           string paymentMethod)
+
+        : Booking(bookingId, rentalDate, returnDate, numDays, bookingStatus) {
+
+        this->rentalPrice = rentalPrice;
+        this->securityDeposit = securityDeposit;
+        this->totalPrice = 0;
+        this->paymentStatus = paymentStatus;
+        this->paymentMethod = paymentMethod;
+    }
+
+    void calculateRental(double pricePerDay) {
+
+        rentalPrice = pricePerDay * getNumDays();
+
+        totalPrice = rentalPrice + securityDeposit;
+
+        cout << "\n--- Rental Calculation ---" << endl;
+        cout << "Price Per Day: $" << pricePerDay << endl;
+        cout << "Number of Days: " << getNumDays() << endl;
+        cout << "Rental Price: $" << rentalPrice << endl;
+        cout << "Security Deposit: $" << securityDeposit << endl;
+        cout << "Total Price: $" << totalPrice << endl;
+    }
+
+    void makePayment() {
+
+        cout << "\n--- Payment Method ---" << endl;
+        cout << "1. Cash" << endl;
+        cout << "2. Credit Card" << endl;
+        cout << "3. Debit Card" << endl;
+        cout << "4. ABA Pay" << endl;
+
+        int choice;
+        cin >> choice;
+
+        if (choice == 1)
+            paymentMethod = "Cash";
+        else if (choice == 2)
+            paymentMethod = "Credit Card";
+        else if (choice == 3)
+            paymentMethod = "Debit Card";
+        else if (choice == 4)
+            paymentMethod = "ABA Pay";
+        else
+            paymentMethod = "Unknown";
+
+        paymentStatus = "Paid";
+
+        cout << "Payment Method: " << paymentMethod << endl;
+        cout << "Payment Status: " << paymentStatus << endl;
+    }
+
+    double getRentalPrice() {
+        return rentalPrice;
+    }
+
+    double getSecurityDeposit() {
+        return securityDeposit;
+    }
+
+    double getTotalPrice() {
+        return totalPrice;
+    }
+
+    string getPaymentStatus() {
+        return paymentStatus;
+    }
+
+    string getPaymentMethod() {
+        return paymentMethod;
+    }
+
+    void displayInfo() {
+
+        cout << "\n--- Rental Information ---" << endl;
+        cout << "Rental Price: $" << rentalPrice << endl;
+        cout << "Security Deposit: $" << securityDeposit << endl;
+        cout << "Total Price: $" << totalPrice << endl;
+        cout << "Payment Status: " << paymentStatus << endl;
+        cout << "Payment Method: " << paymentMethod << endl;
+        cout << "Number of Days: " << getNumDays() << endl;
+    }
+};
+
+
 class Customer {
-    
-    private:
+
+private:
     string name;
     int customerId;
     string dateOFBirth;
     string gender;
     string phoneNumber;
     string email;
-    
-    public:
-    Customer(string name, int customerId, string dateOFBirth, string gender, string phoneNumber, string email) {
+
+public:
+
+    static Customer* customerList[5];
+    static int customerCount;
+
+    Customer(string name, int customerId, string dateOFBirth,
+             string gender, string phoneNumber, string email) {
+
         this->name = name;
         this->customerId = customerId;
         this->dateOFBirth = dateOFBirth;
@@ -251,56 +440,57 @@ class Customer {
         this->phoneNumber = phoneNumber;
         this->email = email;
     }
-    
+
     string getname() {
         return name;
     }
-    
+
     void setname(string name) {
         this->name = name;
     }
-    
+
     int getcustomerId() {
         return customerId;
     }
-    
+
     void setcustomerId(int customerId) {
         this->customerId = customerId;
     }
-    
+
     string getdateOFBirth() {
         return dateOFBirth;
     }
-    
+
     void setdateOFbirth(string dateOFBirth) {
         this->dateOFBirth = dateOFBirth;
     }
-    
+
     string getgender() {
         return gender;
     }
-    
+
     void setgender(string gender) {
         this->gender = gender;
     }
-    
+
     string getphoneNumber() {
         return phoneNumber;
     }
-    
+
     void setphoneNumber(string phoneNumber) {
         this->phoneNumber = phoneNumber;
     }
-    
+
     string getemail() {
         return email;
     }
-    
+
     void setemail(string email) {
         this->email = email;
     }
-    
+
     void displayInfo() {
+
         cout << "Name: " << name << endl;
         cout << "Customer ID: " << customerId << endl;
         cout << "Date of Birth: " << dateOFBirth << endl;
@@ -308,129 +498,82 @@ class Customer {
         cout << "Phone Number: " << phoneNumber << endl;
         cout << "Email: " << email << endl;
     }
+
+    void addCustomer() {
+
+        if (customerCount >= 5) {
+            cout << "\nCustomer list is full (maximum 5 customers)." << endl;
+            return;
+        }
+
+        cout << "\n--- Add Customer ---" << endl;
+
+        cout << "Enter name: ";
+        cin >> name;
+
+        cout << "Enter customer ID: ";
+        cin >> customerId;
+
+        cout << "Enter date of birth: ";
+        cin >> dateOFBirth;
+
+        cout << "Enter gender: ";
+        cin >> gender;
+
+        cout << "Enter phone number: ";
+        cin >> phoneNumber;
+
+        cout << "Enter email: ";
+        cin >> email;
+
+        // Add customer to array
+        customerList[customerCount] = this;
+        customerCount++;
+
+        cout << "\nCustomer added successfully!" << endl;
+    }
+
+    static void displayAllCustomers() {
+
+        cout << "\n--- All Customers ---" << endl;
+
+        if (customerCount == 0) {
+            cout << "No customers found." << endl;
+            return;
+        }
+
+        for (int i = 0; i < customerCount; i++) {
+
+            cout << "\nCustomer " << i + 1 << endl;
+
+            customerList[i]->displayInfo();
+
+            cout << "-----------------------" << endl;
+        }
+    }
 };
 
-class Booking {
-    private:
-    int BookingId;
-    string rentalDate;
-    string returnDate;
-    int numDays;
-    bool bookingStatus;
-    
-    public:
-    Booking(int BookingId, string rentalDate, string returnDate, int numDays, bool bookingStatus) {
-        this->BookingId = BookingId;
-        this->rentalDate = rentalDate;
-        this->returnDate = returnDate;
-        this->numDays = numDays;
-        this->bookingStatus = bookingStatus;
-    }
-    
-    void CreateBooking() {
-        cout << "Enter booking Id:";
-        cin >> BookingId;
-        
-        cout << "Enter rental date:";
-        cin >> rentalDate;
-        
-        cout << "Enter return date:";
-        cin >> returnDate;
-        
-        cout << "Enter number of days:";
-        cin >> numDays;
-        
-        bookingStatus = true;
-        
-        cout << "Booking created" << endl;
-    }
-    
-    void CancelBooking() {
-        bookingStatus = false;
-        cout << "Booking cancelled" << endl;
-    }
-    
-    void EditBooking() {
-        cout << "Enter new rent date: ";
-        cin >> rentalDate;
-        
-        cout << "Enter new return date: ";
-        cin >> returnDate;
-        
-        cout << "Enter new number of days: ";
-        cin >> numDays;
-        
-        cout << "Booking updated" << endl;
-    }
-    
-    void DisplayBooking() {
-        cout << "\n--- Booking info ---" << endl;
-        cout << "Booking Id: " << BookingId << endl;
-        cout << "Rental date: " << rentalDate << endl;
-        cout << "Return date: " << returnDate << endl;
-        cout << "Number of days: " << numDays << endl;
-        if (bookingStatus)
-        cout << "Booking status: Active" << endl;
-        else
-        cout << "Booking status: Cancelled" << endl;
-    }
-    
-    int getBookingId() {
-        return BookingId;
-    }
-    
-    void setBookingId(int BookingId) {
-        this->BookingId = BookingId;
-    }
-    
-    string getRentalDate() {
-        return rentalDate;
-    }
-    
-    void setRentalDate(string rentalDate) {
-        this->rentalDate = rentalDate;
-    }
-    
-    string getReturnDate() {
-        return returnDate;
-    }
-    
-    void setReturnDate(string returnDate) {
-        this->returnDate = returnDate;
-    }
-    
-    int getNumDays() {
-        return numDays;
-    }
-    
-    void setNumDays(int numDays) {
-        this->numDays = numDays;
-    }
-    
-    bool getBookingStatus() {
-        return bookingStatus;
-    }
-    
-    void setBookingStatus(bool bookingStatus) {
-        this->bookingStatus = bookingStatus;
-    }
-};
 Vehicle* Car::carList[5];
 int Car::carCount = 0;
 
 Vehicle* Motorcycle::motoList[5];
 int Motorcycle::motoCount = 0;
 
+Customer* Customer::customerList[5];
+int Customer::customerCount = 0;
+
+
 int main() {
+
     int choice;
-    
-    Car c1("Toyota", "Black", "C001", 2022, 50.00, true, "Sedan");
-    Car c2("Honda", "White", "C002", 2021, 45.00, true, "SUV");
-    Car c3("Mazda", "Red", "C003", 2023, 55.00, false, "Coupe");
-    
+
+    Car c1("Toyota", "Black", "C001", 2022, 50.00, true, "Sedan", 5);
+    Car c2("Honda", "White", "C002", 2021, 45.00, true, "SUV", 5);
+    Car c3("Mazda", "Red", "C003", 2023, 55.00, false, "Coupe", 4);
+
     Motorcycle m1("Yamaha", "Black", "M001", 2022, 25.00, true, "Sport", 600);
     Motorcycle m2("Honda", "Red", "M002", 2021, 20.00, true, "Cruiser", 400);
-    
+
     Car::addCar(&c1);
     Car::addCar(&c2);
     Car::addCar(&c3);
@@ -442,24 +585,29 @@ int main() {
     cout << "We have State of the art, Car and Motorcycle Rentals available to book In Phnom Penh" << endl;
 
     do {
-    cout << "Please select from the options below: "; cin >> choice;
-        switch (choice){
+
+        cout << "Please select from the options below: ";
+        cin >> choice;
+
+        switch (choice) {
+
             case 1:
                 Car::SearchByType(Car::carList, Car::carCount, "Cars");
                 break;
+
             case 2:
                 Motorcycle::SearchByType(Motorcycle::motoList, Motorcycle::motoCount, "Motorcycles");
                 break;
+
             case 3:
+                break;
 
             case 4:
                 cout << "Exiting Program..";
                 break;
         }
-} while (choice != 4);
 
-    ///Booking booking1(1, "05/09/2026", "10/09/2026", 5, true);
-    ///booking1.DisplayBooking();
+    } while (choice != 4);
 
     return 0;
-}
+};
