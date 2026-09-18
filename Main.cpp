@@ -557,9 +557,9 @@ int main() {
                             Vehicle* v = newBooking.CreateBooking();
 
                             if (v != nullptr) {
-                                Customer newCust;
-                                newCust.addCustomer();
-                                newBooking.setCustomerId(newCust.CreateCustId());
+                                Customer* newCust = new Customer;
+                                newCust->addCustomer();
+                                newBooking.setCustomerId(newCust->CreateCustId());
                                 newBooking.makePayment();
                                 bookings.push_back(newBooking);
                             }
