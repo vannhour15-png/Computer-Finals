@@ -144,7 +144,6 @@ public:
     void setPassengerCapacity(int passengerCapacity) {
         this->passengerCapacity = passengerCapacity;
     }
-<<<<<<< HEAD
 
     void displayInfo() override {
         Vehicle::displayInfo();
@@ -204,121 +203,143 @@ public:
     }
 };
 
-
 class Booking {
-
-private:
-    int BookingId;
-    string rentalDate;
-    string returnDate;
-    int numDays;
-    bool bookingStatus;
-
-public:
-
-    Booking(int BookingId, string rentalDate, string returnDate,
-            int numDays, bool bookingStatus) {
-
-        this->BookingId = BookingId;
-        this->rentalDate = rentalDate;
-        this->returnDate = returnDate;
-        this->numDays = numDays;
-        this->bookingStatus = bookingStatus;
-    }
-
-    void CreateBooking() {
-
-        cout << "Enter booking Id: ";
-        cin >> BookingId;
-
-        cout << "Enter rental date: ";
-        cin >> rentalDate;
-
-        cout << "Enter return date: ";
-        cin >> returnDate;
-
-        cout << "Enter number of days: ";
-        cin >> numDays;
-
-        bookingStatus = true;
-
-        cout << "Booking created" << endl;
-    }
-
-    void CancelBooking() {
-        bookingStatus = false;
-        cout << "Booking cancelled" << endl;
-    }
-
-    void EditBooking() {
-
-        cout << "Enter new rent date: ";
-        cin >> rentalDate;
-
-        cout << "Enter new return date: ";
-        cin >> returnDate;
-
-        cout << "Enter new number of days: ";
-        cin >> numDays;
-
-        cout << "Booking updated" << endl;
-    }
-
-    void DisplayBooking() {
-
-        cout << "\n--- Booking info ---" << endl;
-        cout << "Booking Id: " << BookingId << endl;
-        cout << "Rental date: " << rentalDate << endl;
-        cout << "Return date: " << returnDate << endl;
-        cout << "Number of days: " << numDays << endl;
-
-        if (bookingStatus)
-            cout << "Booking status: Active" << endl;
-        else
-            cout << "Booking status: Cancelled" << endl;
-    }
-
-    int getBookingId() {
-        return BookingId;
-    }
-
-    void setBookingId(int BookingId) {
-        this->BookingId = BookingId;
-    }
-
-    string getRentalDate() {
-        return rentalDate;
-    }
-
-    void setRentalDate(string rentalDate) {
-        this->rentalDate = rentalDate;
-    }
-
-    string getReturnDate() {
-        return returnDate;
-    }
-
-    void setReturnDate(string returnDate) {
-        this->returnDate = returnDate;
-    }
-
-    int getNumDays() {
-        return numDays;
-    }
-
-    void setNumDays(int numDays) {
-        this->numDays = numDays;
-    }
-
-    bool getBookingStatus() {
-        return bookingStatus;
-    }
-
-    void setBookingStatus(bool bookingStatus) {
-        this->bookingStatus = bookingStatus;
-    }
+    private:
+        static int nextBookingId;
+        int BookingId;
+        string rentalDate;
+        string returnDate;
+        int numDays;
+        bool bookingStatus;
+ 
+        static string calcReturnDate(string rentalDate, int numDays) {
+            int day, month, year;
+            char slash;
+            stringstream ss(rentalDate);
+            ss >> day >> slash >> month >> slash >> year;
+ 
+            day += numDays;
+            while (day > 30) {
+                day -= 30;
+                month++;
+                if (month > 12) {
+                    month = 1;
+                    year++;
+                }
+            }
+ 
+            stringstream result;
+            result << setw(2) << setfill('0') << day << "/"
+                   << setw(2) << setfill('0') << month << "/"
+                   << year;
+            return result.str();
+        }
+ 
+    public:
+        Booking() {
+            BookingId = nextBookingId;
+            nextBookingId++;
+            rentalDate = "";
+            returnDate = "";
+            numDays = 0;
+            bookingStatus = true;
+        }
+ 
+        string getFormattedId() {
+            stringstream ss;
+            ss << setw(3) << setfill('0') << BookingId;
+            return ss.str();
+        }
+ 
+        void CreateBooking(){
+            cout << "Enter rental date (DD/MM/YYYY): ";
+            cin >> rentalDate;
+ 
+            cout << "Enter number of days: ";
+            cin >> numDays;
+            returnDate = calcReturnDate(rentalDate, numDays);
+            bookingStatus = true;
+ 
+            cout << "Booking ID: " << getFormattedId() << endl;
+            cout << "Return date: " << returnDate << endl;
+        }
+ 
+        void CancelBooking(){
+            bookingStatus = false;
+            cout << "Booking " << getFormattedId() << " cancelled" << endl;
+        }
+ 
+        void EditBooking(){
+            cout << "Enter new rental date (DD/MM/YYYY): ";
+            cin >> rentalDate;
+            cout << "Enter new number of days: ";
+            cin >> numDays;
+            returnDate = calcReturnDate(rentalDate, numDays);
+            cout << "Booking updated" << endl;
+            cout << "New return date: " << returnDate << endl;
+        }
+ 
+        void DisplayBooking(){
+            cout << "\n--- Booking info ---" << endl;
+            cout << "Booking Id: " << getFormattedId() << endl;
+            cout << "Rental date: " << rentalDate << endl;
+            cout << "Return date: " << returnDate << endl;
+            cout << "Number of days: " << numDays << endl;
+            if (bookingStatus)
+                cout << "Booking status: Active" << endl;
+            else
+                cout << "Booking status: Cancelled" << endl;
+        }
+ 
+        int getBookingId() {
+            return BookingId;
+        }
+        string getRentalDate() {
+            return rentalDate;
+        }
+        string getReturnDate() {
+            return returnDate;
+        }
+        int getNumDays() {
+            return numDays;
+        }
+        bool getBookingStatus() {
+            return bookingStatus;
+        }
+ 
+        void setRentalDate(string rentalDate) {
+            this->rentalDate = rentalDate;
+        }
+        void setNumDays(int numDays) {
+            this->numDays = numDays;
+        }
+        void setBookingStatus(bool bookingStatus) {
+            this->bookingStatus = bookingStatus;
+        }
 };
-
+ 
+int Booking::nextBookingId = 1;
+ 
+void EditBookingById(vector<Booking>& bookings, int id) {
+    for (int i = 0; i < bookings.size(); i++) {
+        if (bookings[i].getBookingId() == id) {
+            bookings[i].EditBooking();
+            return;
+        }
+    }
+    cout << "Booking not found." << endl;
+}
+ 
+void CancelBookingById(vector<Booking>& bookings, int id) {
+    for (int i = 0; i < bookings.size(); i++) {
+        if (bookings[i].getBookingId() == id) {
+            bookings[i].CancelBooking();
+            return;
+        }
+    }
+    cout << "Booking not found." << endl;
+}
+ 
 
 class Rental : public Booking {
 
@@ -570,7 +591,10 @@ int Customer::customerCount = 0;
 
 int main() {
 
-    int choice;
+    int choice, Bchoice;
+    vector<Booking> bookings;  
+    Customer cust;
+
 
     Car c1("Toyota", "Black", "C001", 2022, 50.00, true, "Sedan", 5);
     Car c2("Honda", "White", "C002", 2021, 45.00, true, "SUV", 5);
@@ -591,7 +615,8 @@ int main() {
 
     do {
 
-        cout << "Please select from the options below: ";
+        cout << "1.Search all Cars\n2.Search all Motorcycles\n3.Booking Menu";
+        cout << "Please select from the options above: " << endl;
         cin >> choice;
 
         switch (choice) {
@@ -605,6 +630,43 @@ int main() {
                 break;
 
             case 3:
+                do {
+                    cout << "------ Booking Menu ------" << endl;
+                    cout << "1.Create Booking\n2.Edit booking\n3.Cancel Booking\n4.Display Bookings" << endl;
+                    cout << "Please select from the options above: " << endl;
+                    cin >> Bchoice;
+                    switch (Bchoice){
+                        case 1:
+                        for (int i = 0; i < 2; i++) {
+                            Booking newBooking;
+                            newBooking.CreateBooking();
+                            cust.addCustomer();
+                            bookings.push_back(newBooking);
+                        }
+                            break;
+                        case 2:
+                            int editId;
+                            cout << "Enter Booking ID to edit: ";
+                            cin >> editId;
+                            EditBookingById(bookings, editId);
+                            break;
+                        case 3:
+                            int cancelId;
+                            cout << "Enter Booking ID to cancel: ";
+                            cin >> cancelId;
+                            CancelBookingById(bookings, cancelId);
+                            break;
+                        case 4:
+                            for (int i = 0; i < bookings.size(); i++) {
+                            bookings[i].DisplayBooking();
+                            break;
+                            }
+                        case 5:
+                            cout << "Exiting Program..";
+                            break;
+        }
+            }
+                } while (choice != 5);
                 break;
 
             case 4:
@@ -616,181 +678,43 @@ int main() {
 
     return 0;
 };
-=======
-};
-class Booking {
-    private:
-        static int nextBookingId;
-        int BookingId;
-        string rentalDate;
-        string returnDate;
-        int numDays;
-        bool bookingStatus;
+
+// int main() {
+//     Car car1("Toyota", "Black", 101, 2022, 50.00, true, true, "Sedan", 4);
+//     cout << "--- Car Info ---" << endl;
+//     car1.displayInfo();
  
-        static string calcReturnDate(string rentalDate, int numDays) {
-            int day, month, year;
-            char slash;
-            stringstream ss(rentalDate);
-            ss >> day >> slash >> month >> slash >> year;
+//     vector<Booking> bookings;  
  
-            day += numDays;
-            while (day > 30) {
-                day -= 30;
-                month++;
-                if (month > 12) {
-                    month = 1;
-                    year++;
-                }
-            }
+//     cout << "\n=== Creating Bookings ===" << endl;
+//     for (int i = 0; i < 2; i++) {
+//         Booking newBooking;
+//         newBooking.CreateBooking();
+//         bookings.push_back(newBooking);
+//     }
  
-            stringstream result;
-            result << setw(2) << setfill('0') << day << "/"
-                   << setw(2) << setfill('0') << month << "/"
-                   << year;
-            return result.str();
-        }
+//     cout << "\n=== All Bookings ===" << endl;
+//     for (int i = 0; i < bookings.size(); i++) {
+//         bookings[i].DisplayBooking();
+//     }
  
-    public:
-        Booking() {
-            BookingId = nextBookingId;
-            nextBookingId++;
-            rentalDate = "";
-            returnDate = "";
-            numDays = 0;
-            bookingStatus = true;
-        }
+//     cout << "\n=== Editing Booking ===" << endl;
+//     int editId;
+//     cout << "Enter Booking ID to edit: ";
+//     cin >> editId;
+//     EditBookingById(bookings, editId);
  
-        string getFormattedId() {
-            stringstream ss;
-            ss << setw(3) << setfill('0') << BookingId;
-            return ss.str();
-        }
+//     cout << "\n=== Cancelling Booking ===" << endl;
+//     int cancelId;
+//     cout << "Enter Booking ID to cancel: ";
+//     cin >> cancelId;
+//     CancelBookingById(bookings, cancelId);
  
-        void CreateBooking(){
-            cout << "Enter rental date (DD/MM/YYYY): ";
-            cin >> rentalDate;
+//     cout << "\n=== Final Booking List ===" << endl;
+//     for (int i = 0; i < bookings.size(); i++) {
+//         bookings[i].DisplayBooking();
+//     }
  
-            cout << "Enter number of days: ";
-            cin >> numDays;
-            returnDate = calcReturnDate(rentalDate, numDays);
-            bookingStatus = true;
- 
-            cout << "Booking ID: " << getFormattedId() << endl;
-            cout << "Return date: " << returnDate << endl;
-        }
- 
-        void CancelBooking(){
-            bookingStatus = false;
-            cout << "Booking " << getFormattedId() << " cancelled" << endl;
-        }
- 
-        void EditBooking(){
-            cout << "Enter new rental date (DD/MM/YYYY): ";
-            cin >> rentalDate;
-            cout << "Enter new number of days: ";
-            cin >> numDays;
-            returnDate = calcReturnDate(rentalDate, numDays);
-            cout << "Booking updated" << endl;
-            cout << "New return date: " << returnDate << endl;
-        }
- 
-        void DisplayBooking(){
-            cout << "\n--- Booking info ---" << endl;
-            cout << "Booking Id: " << getFormattedId() << endl;
-            cout << "Rental date: " << rentalDate << endl;
-            cout << "Return date: " << returnDate << endl;
-            cout << "Number of days: " << numDays << endl;
-            if (bookingStatus)
-                cout << "Booking status: Active" << endl;
-            else
-                cout << "Booking status: Cancelled" << endl;
-        }
- 
-        int getBookingId() {
-            return BookingId;
-        }
-        string getRentalDate() {
-            return rentalDate;
-        }
-        string getReturnDate() {
-            return returnDate;
-        }
-        int getNumDays() {
-            return numDays;
-        }
-        bool getBookingStatus() {
-            return bookingStatus;
-        }
- 
-        void setRentalDate(string rentalDate) {
-            this->rentalDate = rentalDate;
-        }
-        void setNumDays(int numDays) {
-            this->numDays = numDays;
-        }
-        void setBookingStatus(bool bookingStatus) {
-            this->bookingStatus = bookingStatus;
-        }
-};
- 
-int Booking::nextBookingId = 1;
- 
-void EditBookingById(vector<Booking>& bookings, int id) {
-    for (int i = 0; i < bookings.size(); i++) {
-        if (bookings[i].getBookingId() == id) {
-            bookings[i].EditBooking();
-            return;
-        }
-    }
-    cout << "Booking not found." << endl;
-}
- 
-void CancelBookingById(vector<Booking>& bookings, int id) {
-    for (int i = 0; i < bookings.size(); i++) {
-        if (bookings[i].getBookingId() == id) {
-            bookings[i].CancelBooking();
-            return;
-        }
-    }
-    cout << "Booking not found." << endl;
-}
- 
-int main() {
-    Car car1("Toyota", "Black", 101, 2022, 50.00, true, true, "Sedan", 4);
-    cout << "--- Car Info ---" << endl;
-    car1.displayInfo();
- 
-    vector<Booking> bookings;  
- 
-    cout << "\n=== Creating Bookings ===" << endl;
-    for (int i = 0; i < 2; i++) {
-        Booking newBooking;
-        newBooking.CreateBooking();
-        bookings.push_back(newBooking);
-    }
- 
-    cout << "\n=== All Bookings ===" << endl;
-    for (int i = 0; i < bookings.size(); i++) {
-        bookings[i].DisplayBooking();
-    }
- 
-    cout << "\n=== Editing Booking ===" << endl;
-    int editId;
-    cout << "Enter Booking ID to edit: ";
-    cin >> editId;
-    EditBookingById(bookings, editId);
- 
-    cout << "\n=== Cancelling Booking ===" << endl;
-    int cancelId;
-    cout << "Enter Booking ID to cancel: ";
-    cin >> cancelId;
-    CancelBookingById(bookings, cancelId);
- 
-    cout << "\n=== Final Booking List ===" << endl;
-    for (int i = 0; i < bookings.size(); i++) {
-        bookings[i].DisplayBooking();
-    }
- 
-    return 0;
-}
->>>>>>> 6b79d3ce9c5affbc943ea1ca86c05dda831074a0
+//     return 0;
+// }
+// >>>>>>> 6b79d3ce9c5affbc943ea1ca86c05dda831074a0
